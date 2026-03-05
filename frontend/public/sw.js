@@ -1,10 +1,13 @@
-const CACHE_NAME = 'insightfeed-v1';
+const CACHE_NAME = 'insightfeed-v2';
 
 // Assets to cache on install (app shell)
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',
-  '/favicon.svg',
+  '/icons/icon-192x192.png',
+  '/icons/icon-512x512.png',
+  '/icons/maskable-192x192.png',
+  '/favicon.png',
 ];
 
 // Install: cache app shell
@@ -33,8 +36,22 @@ self.addEventListener('fetch', (event) => {
   // Skip non-GET and chrome-extension requests
   if (request.method !== 'GET' || url.protocol === 'chrome-extension:') return;
 
+  // Static icons — cache-first (they never change)
+  if (url.pathname.startsWith('/icons/') || url.pathname === '/favicon.png') {
+    event.respondWith(
+      caches.match(request).then((cached) => cached || fetch(request).then((response) => {
+        if (response.ok) {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
+        }
+        return response;
+      }))
+    );
+    return;
+  }
+
   // API requests: network-first with 5s timeout, fall back to cache
-  if (url.pathname.startsWith('/api/') || url.origin.includes('localhost:5000')) {
+  if (url.pathname.startsWith('/api/') || url.origin.includes('localhost:5000') || url.origin.includes('onrender.com')) {
     event.respondWith(
       Promise.race([
         fetch(request).then((response) => {
