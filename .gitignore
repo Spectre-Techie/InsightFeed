@@ -1,0 +1,56 @@
+# ========================
+# Dependencies
+# ========================
+node_modules/
+.pnpm-store/
+
+# ========================
+# Environment Variables
+# ========================
+.env
+.env.local
+.env.production
+.env.*.local
+
+# ========================
+# Build Output
+# ========================
+dist/
+build/
+.next/
+out/
+
+# ========================
+# IDE & Editor
+# ========================
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*~
+
+# ========================
+# OS Files
+# ========================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ========================
+# Logs
+# ========================
+logs/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# ========================
+# Testing
+# ========================
+coverage/
+
+# ========================
+# Misc
+# ========================
+*.tgz
+.cache/
